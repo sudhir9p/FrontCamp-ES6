@@ -1,5 +1,5 @@
 
-
+//Common class to do API calls.
 class FetchNewsData {
     defaultUrl = 'https://newsapi.org/v2/';
     constructor(apiKey) {
@@ -7,14 +7,15 @@ class FetchNewsData {
     }
 
     fetchData(url) {
-        return fetch(`${this.defaultUrl}/${url}&apiKey=${this.apiKey}`)
-            .then((resp) => resp.json())
+        return fetch(`${this.defaultUrl}/${url}&apiKey=${this.apiKey}`)  //Used ES6 Fetch
+            .then((resp) => resp.json()) //Used ES6 Template Strings
             .then((data) => {
                 return data;
             });
     }
 }
 
+//To Load the page with News Data using News API with pure javascript
 class DisplayNews {
 
     constructor(apiKey) {
@@ -35,7 +36,7 @@ class DisplayNews {
         const fetchDataObj = new FetchNewsData(apikey)
         fetchDataObj.fetchData("sources?language=en").then((data) => {
             this.newsData = data.sources;
-            data.sources.map((item) => {
+            data.sources.map((item) => { //Used map on arrays
                 let option = this.createNode('option');
                 option.text = item.name;
                 option.id = option.value = item.id;
@@ -56,8 +57,8 @@ class DisplayNews {
         const selectedSourceLanguage = document.getElementById("selectedSourceLanguage");
         const selectedSourceUrl = document.getElementById("selectedSourceUrl");
         const filteredItem = this.newsData.filter(item => selectedItemId == item.id)[0];
-        
-        const { name, country, description, language, url } = filteredItem;
+
+        const { name, country, description, language, url } = filteredItem; //Used ES6 object destructuring
 
         selectedSourceName.innerText = name;
         selectedSourceCountry.innerText = country;
@@ -68,7 +69,7 @@ class DisplayNews {
 }
 
 
-
+/*Initiate the app */
 const apiKey = "c132a5c4ae714d27bdcc6b99f32c3c47";
 const newsFeed = document.getElementById('newsFeedData');
 
