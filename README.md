@@ -1,1 +1,1 @@
-# Initial commit, creating project.
+# Front Camp ES6 HomeWork.
