@@ -21,7 +21,7 @@ class DisplayNews {
     constructor(apiKey) {
         this.apiKey = apiKey;
     }
-    
+
     newsData = [];
     createNode(element) {
         return document.createElement(element);
@@ -65,6 +65,36 @@ class DisplayNews {
         selectedSourcedescription.innerText = description;
         selectedSourceLanguage.innerText = language;
         selectedSourceUrl.innerText = selectedSourceUrl.href = url;
+
+        document.getElementById("topHeadlines").innerHTML = "";
+    }
+
+    getTopHeadLines(apiKey) {
+        const channelsDropdown = document.getElementById("ddlchannelslist");
+        const selectedItemId = channelsDropdown.options[document.getElementById("ddlchannelslist").selectedIndex].value;
+        const fetchDataObj = new FetchNewsData(apiKey)
+        fetchDataObj.fetchData(`top-headlines?sources=${selectedItemId}`).then((data) => {
+            data.articles.map((item, index) => {
+                this.appendTopHeadlineNodes(`${selectedItemId}-${index}`, item);
+            });
+        });
+    }
+
+    appendTopHeadlineNodes(sourceID, item) {
+        const topHeadlines = document.getElementById("topHeadlines");
+        const headlineItem = this.createNode("div")
+        headlineItem.setAttribute("Id", sourceID);
+        const ItemDetails = `
+        <div><strong>Author :</strong> <label id="author-${sourceID}">${item.author}</label></div>
+        <div><strong>Title :</strong> <label id="title-${sourceID}">${item.title}</label></div>
+        <div><strong>Description :</strong> <label id="description-${sourceID}">${item.description}</label></div>
+        <div><strong>Url :</strong> <a id="url-${sourceID}" href="${item.url}">${item.url}</a></div>
+        <div><strong>UrlToImage :</strong> <a id="urlToImage-${sourceID}" href="${item.urlToImage}">${item.urlToImage}</a></div>
+        <div><strong>Content :</strong> <label id="content-${sourceID}">${item.content}</label></div>
+        <hr />
+        `;
+        headlineItem.innerHTML = ItemDetails;
+        topHeadlines.appendChild(headlineItem);
     }
 }
 
@@ -76,3 +106,4 @@ const newsFeed = document.getElementById('newsFeedData');
 let obj = new DisplayNews();
 obj.displaySources(apiKey);
 channelsOnchange = () => obj.sourcesOnChange();
+getTopHeadLines = () => obj.getTopHeadLines(apiKey);
